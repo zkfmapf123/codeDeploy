@@ -130,7 +130,37 @@ resource "aws_iam_policy" "codedeploy_policy" {
   })
 }
 
+resource "aws_iam_policy" "lambda_hooks" {
+  name = "lambda_hooks"
+  path = "/"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "lambda:CreateFunction",
+          "lambda:UpdateFunctionCode",
+          "lambda:UpdateFunctionConfiguration",
+          "lambda:DeleteFunction",
+          "lambda:AddPermission",
+          "lambda:RemovePermission"
+          // Add any other Lambda-related actions you need here
+        ],
+        "Resource" : "*"
+      }
+    ]
+  })
+}
+
+
 resource "aws_iam_role_policy_attachment" "codedeploy_attachment" {
   policy_arn = aws_iam_policy.codedeploy_policy.arn
   role       = aws_iam_role.codedeploy.name
+}
+
+resource "aws_iam_role_policy_attachment" "codedeploy_lambda" {
+  policy_arn = aws_iam_policy.lambda_hooks.arn
+  role = aws_iam_role.codedeploy.name
 }

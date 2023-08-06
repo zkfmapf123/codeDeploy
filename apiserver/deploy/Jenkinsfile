@@ -3,19 +3,35 @@ pipeline {
 
     environment {
         REGION = 'ap-northeast-2'
-        ECR_REPOSITORY = "583142839179.dkr.ecr.${env.REGION}.amazonaws.com/todolist-repository-poc"
+        ECR_REPOSITORY = "182024812696.dkr.ecr.${env.REGION}.amazonaws.com/todolist-repository-poc"
         CLUSTER = 'todolist-cluster-poc'
         SERVICE = 'healthcheck-container-poc'
         TASK_DEFINITION = 'todolist-family'
-        AWS_CREDENTIAL_NAME = 'meta-common-poc-aws-credentials'
+        AWS_CREDENTIAL_NAME = 'aws_credentials'
+        GIT_COMMIT_MESSAGE = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
+
+        CODE_DP_APP = "poc-cd-app"
+        CODE_DP_GROUP = "bluegreen-deploy"
     }
 
     stages {
         stage('build') {
             steps {
-                dir('terraform-poc/ecs-code-deploy/apiserver') {
+                dir('apiserver') {
                     script {
-                        docker.build("${env.ECR_REPOSITORY}:build-latest")
+                        def searchString = "&&BUILD_ID&&"
+                        def pipelineScriptPath = "deploy/task-definition.json"
+                    
+                        def pipelineScriptContent = readFile(file: pipelineScriptPath)
+                    
+                        def updatedPipelineScript = pipelineScriptContent.replace(searchString, env.BUILD_ID)
+                        writeFile(file: pipelineScriptPath, text: updatedPipelineScript)
+
+                        sh """
+                            echo commit message => ${env.GIT_COMMIT_MESSAGE}
+                            docker build -t builder:build-${env.BUILD_ID} -t builder:build-latest --target builder .
+                            docker build -t ${env.ECR_REPOSITORY}:build-${env.BUILD_ID} -t runner:build-latest --target runner .
+                        """
                     }
                 }
             }
@@ -25,7 +41,19 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("https://${ECR_REPOSITORY}", "ecr:${REGION}:${AWS_CREDENTIAL_NAME}") {
-                        docker.image("${env.ECR_REPOSITORY}:build-latest").push()
+                        docker.image("${env.ECR_REPOSITORY}:build-${env.BUILD_ID}").push()
+                    }
+                }
+            }
+
+            post {
+                always {
+                    script {
+                        sh """
+                            docker rmi ${env.ECR_REPOSITORY}:build-${env.BUILD_ID}
+                            docker rmi builder:build-${env.BUILD_ID}
+                            docker image prune -f
+                        """
                     }
                 }
             }
@@ -35,9 +63,25 @@ pipeline {
             steps {
                 script {
                     withAWS(credentials:"${AWS_CREDENTIAL_NAME}", region:"${REGION}") {
-                        dir('terraform-poc/ecs-code-deploy/apiserver/deploy') {
-                            sh 'aws ecs register-task-definition --cli-input-json file://task-definition.json'
-                            sh "aws ecs update-service --cluster ${CLUSTER} --service ${SERVICE} --task-definition ${TASK_DEFINITION}"
+                        dir('apiserver/deploy') {
+                            def revision = sh(returnStdout: true, script: "aws ecs register-task-definition --cli-input-json file://task-definition.json | jq -r '.taskDefinition.revision'").trim()
+
+                            def searchString = "&&BUILD_ID&&"
+                            def pipelineScriptPath = "appspec.yaml"
+                            def pipelineScriptContent = readFile(file: pipelineScriptPath)
+                            def updatedPipelineScript = pipelineScriptContent.replace(searchString, revision)
+                            writeFile(file: pipelineScriptPath, text: updatedPipelineScript)
+
+                            // --description '${env.GIT_COMMIT_MESSAGE}:${revision}' \
+                            def appSpecContentStr = readFile(file: pipelineScriptPath)
+
+                            sh """
+                                aws deploy create-deployment \
+                                    --application-name poc-cd-app \
+                                    --deployment-group-name bluegreen-deploy \
+                                    --cli-input-yaml file://appspec.yaml \
+                                    --region ap-northeast-2 
+                            """
                         }
                     }
                 }

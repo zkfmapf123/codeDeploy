@@ -1,0 +1,28 @@
+applicationName: 'poc-cd-app'
+deploymentGroupName: 'bluegreen-deploy'
+revision:
+  revisionType: AppSpecContent
+  appSpecContent:
+    content: |
+      version: 0.0
+      Resources:
+        - TargetService:
+            Type: AWS::ECS::Service
+            Properties:
+              TaskDefinition: "arn:aws:ecs:ap-northeast-2:182024812696:task-definition/todolist-family:&&BUILD_ID&&"
+              LoadBalancerInfo:
+                ContainerName: "healthcheck-container-poc"
+                ContainerPort: 3000
+              CapacityProviderStrategy:
+                - Base: 1
+                  CapacityProvider: "FARGATE_SPOT"
+                  Weight: 3
+                - Base: 0
+                  CapacityProvider: "FARGATE"
+                  Weight: 1
+      Hooks:
+        - BeforeInstall: 'helloworld'
+        - AfterInstall: 'helloworld'
+        - AfterAllowTestTraffic: 'helloworld'
+        - BeforeAllowTraffic: 'helloworld'
+        - AfterAllowTraffic: 'helloworld'

@@ -1,9 +1,9 @@
 locals {
-    lambdaNames = {
-        "readyDeployLambda" : {},
-        "beforeTrafficLambda" : {},
-        "ProgressTrafficLambda" : {},
-        "completeTrafficBeforeServingProductLambda" : {},
-        "completeDeployProductLambda" : {},
-    }
+  lambdaNames = {
+    "readyDeployLambda" : {},
+    "beforeTrafficLambda" : {},
+    "ProgressTrafficLambda" : {},
+    "completeTrafficBeforeServingProductLambda" : {},
+    "completeDeployProductLambda" : {},
+  }
 }

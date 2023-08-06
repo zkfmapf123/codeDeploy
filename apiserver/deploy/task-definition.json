@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "healthcheck-container-poc",
-      "image": "583142839179.dkr.ecr.ap-northeast-2.amazonaws.com/todolist-repository-poc:build-latest",
+      "image": "583142839179.dkr.ecr.ap-northeast-2.amazonaws.com/todolist-repository-poc:build-&&BUILD_ID&&",
       "cpu": 256,
       "memory": 512,
       "portMappings": [
@@ -35,7 +35,7 @@
       }
     }
   ],
-  "executionRoleArn": "arn:aws:iam::583142839179:role/pipeline-ecs-task-definition-poc",
+  "executionRoleArn": "arn:aws:iam::182024812696:role/pipeline-ecs-task-definition-poc",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
