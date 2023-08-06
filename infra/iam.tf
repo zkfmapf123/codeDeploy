@@ -161,3 +161,37 @@ resource "aws_iam_role_policy_attachment" "codedeploy_lambda" {
   policy_arn = aws_iam_policy.lambda_hooks.arn
   role       = aws_iam_role.codedeploy.name
 }
+
+#############################################################
+### Lambda
+#############################################################
+resource "aws_iam_role" "lambda_cli_hook_role" {
+  name = "lambda-cli-hook-role"
+
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "lambda.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+})
+
+  tags = {
+    Name = "lambda-cli-hook-role"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_codedeploy_attachment" {
+  policy_arn = aws_iam_policy.codedeploy_policy.arn
+  role       = aws_iam_role.lambda_cli_hook_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_codedeploy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  role       = aws_iam_role.lambda_cli_hook_role.name
+}
