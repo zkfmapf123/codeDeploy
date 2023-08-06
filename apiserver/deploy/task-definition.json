@@ -1,0 +1,43 @@
+{
+  "family": "todolist-family",
+  "containerDefinitions": [
+    {
+      "name": "healthcheck-container-poc",
+      "image": "583142839179.dkr.ecr.ap-northeast-2.amazonaws.com/todolist-repository-poc:build-latest",
+      "cpu": 256,
+      "memory": 512,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "PORT",
+          "value": "3000"
+        }
+      ],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/poc-container",
+          "awslogs-create-group": "true",
+          "awslogs-region": "ap-northeast-2",
+          "awslogs-stream-prefix": "poc"
+        }
+      }
+    }
+  ],
+  "executionRoleArn": "arn:aws:iam::583142839179:role/pipeline-ecs-task-definition-poc",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512"
+}

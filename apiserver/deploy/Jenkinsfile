@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        REGION = 'ap-northeast-2'
+        ECR_REPOSITORY = "583142839179.dkr.ecr.${env.REGION}.amazonaws.com/todolist-repository-poc"
+        CLUSTER = 'todolist-cluster-poc'
+        SERVICE = 'healthcheck-container-poc'
+        TASK_DEFINITION = 'todolist-family'
+        AWS_CREDENTIAL_NAME = 'meta-common-poc-aws-credentials'
+    }
+
+    stages {
+        stage('build') {
+            steps {
+                dir('terraform-poc/ecs-code-deploy/apiserver') {
+                    script {
+                        docker.build("${env.ECR_REPOSITORY}:build-latest")
+                    }
+                }
+            }
+        }
+
+        stage('push') {
+            steps {
+                script {
+                    docker.withRegistry("https://${ECR_REPOSITORY}", "ecr:${REGION}:${AWS_CREDENTIAL_NAME}") {
+                        docker.image("${env.ECR_REPOSITORY}:build-latest").push()
+                    }
+                }
+            }
+        }
+
+        stage('deploy') {
+            steps {
+                script {
+                    withAWS(credentials:"${AWS_CREDENTIAL_NAME}", region:"${REGION}") {
+                        dir('terraform-poc/ecs-code-deploy/apiserver/deploy') {
+                            sh 'aws ecs register-task-definition --cli-input-json file://task-definition.json'
+                            sh "aws ecs update-service --cluster ${CLUSTER} --service ${SERVICE} --task-definition ${TASK_DEFINITION}"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
