@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "healthcheck-container-poc",
-      "image": "583142839179.dkr.ecr.ap-northeast-2.amazonaws.com/todolist-repository-poc:build-&&BUILD_ID&&",
+      "image": "182024812696.dkr.ecr.ap-northeast-2.amazonaws.com/todolist-repository-poc:build-&&BUILD_ID&&",
       "cpu": 256,
       "memory": 512,
       "portMappings": [

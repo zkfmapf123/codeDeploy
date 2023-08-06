@@ -116,18 +116,10 @@ resource "aws_iam_policy" "codedeploy_policy" {
           "elasticloadbalancing:ModifyRule",
           "s3:GetObject",
           "codedeploy:PutLifecycleEventHookExecutionStatus",
+          "iam:PassRole"
         ]
         Effect   = "Allow"
         Resource = "*"
-      },
-      {
-        Action = [
-          "iam:PassRole"
-        ]
-        Effect = "Allow"
-        Resource = [
-          aws_iam_role.ecs.arn,
-        ]
       },
     ]
   })
