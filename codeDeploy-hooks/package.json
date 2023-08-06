@@ -1,0 +1,22 @@
+{
+  "name": "codedeploy-hooks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "zip": "cp -r node_modules ./dist/ && cd dist && zip -r function.zip . && mv function.zip ../",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-lambda": "^1.0.7",
+    "aws-sdk": "^2.1430.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "@types/aws-sdk": "^2.7.0"
+  }
+}

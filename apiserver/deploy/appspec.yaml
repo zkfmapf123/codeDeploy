@@ -13,3 +13,9 @@ revision:
               LoadBalancerInfo:
                 ContainerName: "healthcheck-container-poc"
                 ContainerPort: 3000
+      Hooks:
+        - BeforeInstall: 'codeDeployHooks'
+        - AfterInstall: 'codeDeployHooks'
+        - AfterAllowTestTraffic: 'codeDeployHooks'
+        - BeforeAllowTraffic: 'codeDeployHooks'
+        - AfterAllowTraffic: 'codeDeployHooks'
