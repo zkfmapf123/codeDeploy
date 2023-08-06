@@ -10,9 +10,6 @@ revision:
             Type: AWS::ECS::Service
             Properties:
               TaskDefinition: "arn:aws:ecs:ap-northeast-2:182024812696:task-definition/todolist-family:&&BUILD_ID&&"
-              LoadBalancerInfo:
-                ContainerName: "healthcheck-container-poc"
-                ContainerPort: 3000
               CapacityProviderStrategy:
                 - Base: 1
                   CapacityProvider: "FARGATE_SPOT"
