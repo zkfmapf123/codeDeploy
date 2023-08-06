@@ -1,5 +1,7 @@
 ## apiserver
 node_modules
+dist
+*.zip
 
 ## infra
 .terraform/
