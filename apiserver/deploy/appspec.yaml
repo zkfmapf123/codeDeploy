@@ -10,6 +10,15 @@ revision:
             Type: AWS::ECS::Service
             Properties:
               TaskDefinition: "arn:aws:ecs:ap-northeast-2:182024812696:task-definition/todolist-family:&&BUILD_ID&&"
+              LoadBalancerInfo:
+                ContainerName: "healthcheck-container-poc"
+                ContainerPort: 3000
+              PlatformVersion: "LATEST"
+              NetworkConfiguration:
+                AwsvpcConfiguration:
+                  Subnets: ["subnet-090a39e7021af0252","subnet-05808141f0c093170"]
+                  SecurityGroups: ["sg-0aa993a4a58861271"]
+                  AssignPublicIp: "ENABLED"
               CapacityProviderStrategy:
                 - Base: 1
                   CapacityProvider: "FARGATE_SPOT"
