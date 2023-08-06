@@ -72,6 +72,8 @@ pipeline {
                             def updatedPipelineScript = pipelineScriptContent.replace(searchString, revision)
                             writeFile(file: pipelineScriptPath, text: updatedPipelineScript)
 
+                            sh "cat appspec.yaml"
+
                             // --description '${env.GIT_COMMIT_MESSAGE}:${revision}' \
                             def appSpecContentStr = readFile(file: pipelineScriptPath)
 
