@@ -4,16 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf node_modules && rm -rf dist",
-    "build": "npm install --production && tsc",
-    "zip": "cp -r node_modules ./dist/ && cd dist && zip -r function.zip . && mv function.zip ../",
-    "upload": "npm run clean && npm run build && npm run zip",
+    "clean": "rm -rf node_modules && rm -rf *.zip && npm install --production",
+    "zip": "zip -r function.zip .",
+    "upload": "npm run clean && npm run zip",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@slack/webhook": "^6.1.0",
     "aws-sdk": "^2.1430.0"
   },
   "devDependencies": {
