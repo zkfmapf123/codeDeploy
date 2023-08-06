@@ -4,7 +4,7 @@ revision:
   revisionType: AppSpecContent
   appSpecContent:
     content: |
-      version: 0.0
+      version: 0
       Resources:
         - TargetService:
             Type: AWS::ECS::Service
@@ -13,19 +13,6 @@ revision:
               LoadBalancerInfo:
                 ContainerName: "healthcheck-container-poc"
                 ContainerPort: 3000
-              PlatformVersion: "LATEST"
-              NetworkConfiguration:
-                AwsvpcConfiguration:
-                  Subnets: ["subnet-090a39e7021af0252","subnet-05808141f0c093170"]
-                  SecurityGroups: ["sg-0aa993a4a58861271"]
-                  AssignPublicIp: "ENABLED"
-              CapacityProviderStrategy:
-                - Base: 1
-                  CapacityProvider: "FARGATE_SPOT"
-                  Weight: 3
-                - Base: 0
-                  CapacityProvider: "FARGATE"
-                  Weight: 1
       Hooks:
         - BeforeInstall: 'codeDeployHooks'
         - AfterInstall: 'codeDeployHooks'
