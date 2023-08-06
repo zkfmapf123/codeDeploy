@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf node_modules && rm -rf dist",
+    "build": "npm install --production && tsc",
     "zip": "cp -r node_modules ./dist/ && cd dist && zip -r function.zip . && mv function.zip ../",
+    "upload": "npm run clean && npm run build && npm run zip",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

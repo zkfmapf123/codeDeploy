@@ -1,14 +1,9 @@
-import aws from 'aws-sdk'
+import { CodeDeploy } from 'aws-sdk'
 
-const codeDeploy = new aws.CodeDeploy({ apiVersion: '2014-10-06' })
-
-interface CodeDeployHookParams {
-  deploymentId: string
-  lifecycleEventHookExecutionId: string
-  status: 'Succeeded' | 'Failed'
-}
+const codeDeploy = new CodeDeploy({ apiVersion: '2014-10-06' })
 
 export const handler = async (event, context, callback) => {
+  console.log('hello world')
   console.log(JSON.stringify(event, null, 4))
 
   const { DeploymentId: deploymentId, LifecycleEventHookExecutionId: lifecycleEventHookExecutionId } = event
@@ -19,6 +14,7 @@ export const handler = async (event, context, callback) => {
   }
 
   codeDeploy.putLifecycleEventHookExecutionStatus(params, (err, data) => {
+    console.log(err, data)
     if (err) {
       callback('Validation test failed')
     } else {
