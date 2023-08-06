@@ -164,34 +164,28 @@ resource "aws_iam_role_policy_attachment" "codedeploy_lambda" {
 
 #############################################################
 ### Lambda
+### https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/tutorial-ecs-with-hooks-create-hooks.html
 #############################################################
 resource "aws_iam_role" "lambda_cli_hook_role" {
-  name = "lambda-cli-hook-role"
+  name        = "lambda-cli-hook-role"
+  description = "Allows Lambda functions to call AWS services on your behalf."
 
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "lambda.amazonaws.com"
-            },
-            "Action": "sts:AssumeRole"
-        }
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "lambda.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
     ]
-})
-
-  tags = {
-    Name = "lambda-cli-hook-role"
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "lambda_codedeploy_attachment" {
-  policy_arn = aws_iam_policy.codedeploy_policy.arn
-  role       = aws_iam_role.lambda_cli_hook_role.name
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_codedeploy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.lambda_cli_hook_role.name
+  role       = "lambda-cli-hook-role"
 }
+

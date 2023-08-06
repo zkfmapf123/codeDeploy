@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.3.9",
-  "serial": 68,
+  "serial": 67,
   "lineage": "86b7c827-181e-b5c2-066a-0c07ab795d19",
   "outputs": {
     "v": {
@@ -845,6 +845,44 @@
           "sensitive_attributes": [],
           "private": "bnVsbA==",
           "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "lambda_cli_hook_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::182024812696:role/lambda-cli-hook-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2023-08-06T16:55:11Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "lambda-cli-hook-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::182024812696:policy/codedeploy-policy",
+              "arn:aws:iam::aws:policy/AWSLambdaExecute"
+            ],
+            "max_session_duration": 3600,
+            "name": "lambda-cli-hook-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": null,
+            "tags": {
+              "Name": "lambda-cli-hook-role"
+            },
+            "tags_all": {
+              "Name": "lambda-cli-hook-role"
+            },
+            "unique_id": "AROASUYMGHCMAHN2NDGVH"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
         }
       ]
     },
