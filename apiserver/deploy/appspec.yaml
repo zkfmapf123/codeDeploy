@@ -21,8 +21,8 @@ revision:
                   CapacityProvider: "FARGATE"
                   Weight: 1
       Hooks:
-        - BeforeInstall: 'helloworld'
-        - AfterInstall: 'helloworld'
-        - AfterAllowTestTraffic: 'helloworld'
-        - BeforeAllowTraffic: 'helloworld'
-        - AfterAllowTraffic: 'helloworld'
+        - BeforeInstall: 'helloWorld'
+        - AfterInstall: 'helloWorld'
+        - AfterAllowTestTraffic: 'helloWorld'
+        - BeforeAllowTraffic: 'helloWorld'
+        - AfterAllowTraffic: 'helloWorld'

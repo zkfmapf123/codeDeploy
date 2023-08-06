@@ -107,12 +107,15 @@ resource "aws_iam_policy" "codedeploy_policy" {
           "ecs:DeleteTaskSet",
           "ecs:DescribeServices",
           "ecs:UpdateServicePrimaryTaskSet",
+          "ecs:RegisterTaskDefinition",
+          "ecs:UpdateService",
           "elasticloadbalancing:DescribeListeners",
           "elasticloadbalancing:DescribeRules",
           "elasticloadbalancing:DescribeTargetGroups",
           "elasticloadbalancing:ModifyListener",
           "elasticloadbalancing:ModifyRule",
-          "s3:GetObject"
+          "s3:GetObject",
+          "codedeploy:PutLifecycleEventHookExecutionStatus",
         ]
         Effect   = "Allow"
         Resource = "*"
@@ -140,6 +143,8 @@ resource "aws_iam_policy" "lambda_hooks" {
       {
         "Effect" : "Allow",
         "Action" : [
+          "lambda:InvokeFunction",
+          "lambda:InvokeAsync",
           "lambda:CreateFunction",
           "lambda:UpdateFunctionCode",
           "lambda:UpdateFunctionConfiguration",
@@ -162,5 +167,5 @@ resource "aws_iam_role_policy_attachment" "codedeploy_attachment" {
 
 resource "aws_iam_role_policy_attachment" "codedeploy_lambda" {
   policy_arn = aws_iam_policy.lambda_hooks.arn
-  role = aws_iam_role.codedeploy.name
+  role       = aws_iam_role.codedeploy.name
 }
