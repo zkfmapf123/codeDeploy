@@ -14,8 +14,8 @@ revision:
                 ContainerName: "healthcheck-container-poc"
                 ContainerPort: 3000
       Hooks:
-        - BeforeInstall: 'arn:aws:lambda:ap-northeast-2:182024812696:function:codeDeployHooks'
-        - AfterInstall: 'arn:aws:lambda:ap-northeast-2:182024812696:function:codeDeployHooks'
-        - AfterAllowTestTraffic: 'arn:aws:lambda:ap-northeast-2:182024812696:function:codeDeployHooks'
-        - BeforeAllowTraffic: 'arn:aws:lambda:ap-northeast-2:182024812696:function:codeDeployHooks'
-        - AfterAllowTraffic: 'arn:aws:lambda:ap-northeast-2:182024812696:function:codeDeployHooks'
+        - BeforeInstall: 'codeDeployHooks'
+        - AfterInstall: 'codeDeployHooks'
+        - AfterAllowTestTraffic: 'codeDeployHooks'
+        - BeforeAllowTraffic: 'codeDeployHooks'
+        - AfterAllowTraffic: 'codeDeployHooks'
