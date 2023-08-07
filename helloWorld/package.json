@@ -6,17 +6,13 @@
   "scripts": {
     "clean": "rm -rf node_modules && rm -rf *.zip && npm install",
     "zip": "zip -r function.zip .",
-    "upload": "aws lambda update-function-code --function-name hooks --zip-file fileb://function.zip",
+    "upload": "aws lambda update-function-code --function-name helloWorld --zip-file fileb://function.zip",
     "start": "npm run clean && npm run zip && npm run upload"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@slack/webhook": "^6.1.0",
-    "aws-sdk": "^2.1430.0"
-  },
-  "devDependencies": {
-    "@types/aws-sdk": "^2.7.0"
+    "@slack/webhook": "^6.1.0"
   }
 }
