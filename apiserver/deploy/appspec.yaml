@@ -1,5 +1,5 @@
-applicationName: 'poc-cd-app'
-deploymentGroupName: 'bluegreen-deploy'
+applicationName: "poc-cd-app"
+deploymentGroupName: "bluegreen-deploy"
 revision:
   revisionType: AppSpecContent
   appSpecContent:
@@ -14,8 +14,8 @@ revision:
                 ContainerName: "healthcheck-container-poc"
                 ContainerPort: 3000
       Hooks:
-        - BeforeInstall: 'arn:aws:lambda:ap-northeast-2:182024812696:function:hooks'
-        - AfterInstall: 'arn:aws:lambda:ap-northeast-2:182024812696:function:hooks'
-        - AfterAllowTestTraffic: 'arn:aws:lambda:ap-northeast-2:182024812696:function:hooks'
-        - BeforeAllowTraffic: 'arn:aws:lambda:ap-northeast-2:182024812696:function:hooks'
-        - AfterAllowTraffic: 'arn:aws:lambda:ap-northeast-2:182024812696:function:hooks'
+        - BeforeInstall: 'hooks'
+        - AfterInstall: 'hooks'
+        - AfterAllowTestTraffic: 'hooks'
+        - BeforeAllowTraffic: 'hooks'
+        - AfterAllowTraffic: 'hooks'
